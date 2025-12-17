@@ -191,3 +191,50 @@ function submitTest(){
 </script>
 </body>
   </html>
+let records = JSON.parse(localStorage.getItem("jambRecords")) || [];
+records.push({
+  name: name,
+  score: score,
+  total: questions.length,
+  date: new Date().toLocaleString()
+});
+localStorage.setItem("jambRecords", JSON.stringify(records));<!DOCTYPE html>
+<html>
+<head>
+<title>CBT Results</title>
+<style>
+body{font-family:Arial;background:#0f172a;color:white;padding:20px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #334155;padding:10px;text-align:center}
+th{background:#020617}
+</style>
+</head>
+<body>
+
+<h2>CBT Participants</h2>
+<table>
+<tr>
+<th>S/N</th>
+<th>Name</th>
+<th>Score</th>
+<th>Date</th>
+</tr>
+<tbody id="data"></tbody>
+</table>
+
+<script>
+let records = JSON.parse(localStorage.getItem("jambRecords")) || [];
+let html = "";
+records.forEach((r,i)=>{
+  html += `<tr>
+    <td>${i+1}</td>
+    <td>${r.name}</td>
+    <td>${r.score}/${r.total}</td>
+    <td>${r.date}</td>
+  </tr>`;
+});
+document.getElementById("data").innerHTML = html;
+</script>
+
+</body>
+</html>
