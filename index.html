@@ -2,256 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>UTME SMASHERS TUTORIAL – CBT Mock</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JAMB CBT – Physics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {
-  margin: 0;
+body{
   font-family: Arial, sans-serif;
-  background: #111;
-  color: #fff;
+  background:#0f172a;
+  color:#e5e7eb;
+  margin:0;
 }
-header {
-  background: #000;
-  padding: 15px;
-  text-align: center;
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
 }
-header h1 {
-  color: #ffd700;
-  margin: 0;
+h1{text-align:center;color:#38bdf8}
+.box{
+  background:#020617;
+  padding:20px;
+  border-radius:10px;
 }
-.container {
-  padding: 20px;
+label{
+  display:block;
+  margin:10px 0;
+  padding:10px;
+  border:1px solid #334155;
+  border-radius:6px;
+  cursor:pointer;
 }
-.card {
-  background: rgba(0,0,0,0.8);
-  padding: 20px;
-  border-radius: 10px;
+input[type=text]{
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:none;
+  margin-bottom:15px;
 }
-button {
-  background: #ffd700;
-  border: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  cursor: pointer;
+.nav{
+  display:flex;
+  justify-content:space-between;
+  margin-top:15px;
 }
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
 }
-.timer {
-  color: #ffd700;
-  font-weight: bold;
-  text-align: right;
+.next{background:#38bdf8}
+.prev{background:#64748b}
+.submit{background:#22c55e;width:100%;margin-top:20px}
+.result{
+  background:#020617;
+  padding:20px;
+  border-radius:10px;
+  margin-top:20px;
+  display:none;
 }
 </style>
 </head>
 
 <body>
-<header>
-  <h1>UTME SMASHERS TUTORIAL</h1>
-  <p>JAMB CBT MOCK</p>
-</header>
-
 <div class="container">
-  <div class="card">
-    <h2>Candidate Login</h2>
-    <input placeholder="Full Name">
-    <input placeholder="Email Address">
-    <button>Start Mock Test</button>
-  </div>
+<h1>JAMB CBT – PHYSICS</h1>
+
+<div class="box" id="startBox">
+  <input type="text" id="candidateName" placeholder="Enter your full name">
+  <button class="next" onclick="startTest()">Start Test</button>
 </div>
 
-</body>
-  </html>
-/utme-smashers-mock/
-│
-├─ index.html        ← Login page
-├─ style.css         ← Styling for all pages
-├─ script.js         ← Login logic
-├─ english.html      ← English mock
-├─ biology.html      ← Biology mock
-├─ chemistry.html    ← Chemistry mock
-├─ physics.html      ← Physics mock
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UTME Smashers Login</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-  <h1>UTME Smashers Mock Test</h1>
-  <form id="loginForm">
-    <input type="text" id="username" placeholder="Enter your username" required>
-    <input type="password" id="password" placeholder="Enter your password" required>
-    <button type="submit">Login</button>
-  </form>
-  <p id="error" class="error"></p>
+<div class="box" id="questionBox" style="display:none"></div>
+
+<div class="nav" id="navBtns" style="display:none">
+  <button class="prev" onclick="prevQ()">Previous</button>
+  <button class="next" onclick="nextQ()">Next</button>
 </div>
-<script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Select Subject</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-  <h1>Select Your Mock Test Subject</h1>
-  <a href="english.html"><button>English</button></a>
-  <a href="biology.html"><button>Biology</button></a>
-  <a href="chemistry.html"><button>Chemistry</button></a>
-  <a href="physics.html"><button>Physics</button></a>
-</div>
-</body>
-    </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biology Mock Test</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-  <h1>Biology Mock Test (40 Questions)</h1>
-  <form id="mockForm">
-    <!-- Question 1 -->
-    <div class="question">
-      <p>1. Which process produces gametes in humans?</p>
-      <input type="radio" name="q1" value="Mitosis"> A. Mitosis<br>
-      <input type="radio" name="q1" value="Meiosis"> B. Meiosis<br>
-      <input type="radio" name="q1" value="Fertilization"> C. Fertilization<br>
-      <input type="radio" name="q1" value="Binary Fission"> D. Binary Fission
-    </div>
 
-    <!-- Question 2 -->
-    <div class="question">
-      <p>2. Plants that have seeds but no flowers are called?</p>
-      <input type="radio" name="q2" value="Gymnosperms"> A. Gymnosperms<br>
-      <input type="radio" name="q2" value="Angiosperms"> B. Angiosperms<br>
-      <input type="radio" name="q2" value="Ferns"> C. Ferns<br>
-      <input type="radio" name="q2" value="Bryophytes"> D. Bryophytes
-    </div>
+<button class="submit" id="submitBtn" onclick="submitTest()" style="display:none">Submit Test</button>
 
-    <!-- Question 3 -->
-    <div class="question">
-      <p>3. The functional unit of the kidney is called?</p>
-      <input type="radio" name="q3" value="Neuron"> A. Neuron<br>
-      <input type="radio" name="q3" value="Nephron"> B. Nephron<br>
-      <input type="radio" name="q3" value="Alveolus"> C. Alveolus<br>
-      <input type="radio" name="q3" value="Lobule"> D. Lobule
-    </div>
-
-    <!-- Question 4 -->
-    <div class="question">
-      <p>4. Which hormone regulates blood sugar levels?</p>
-      <input type="radio" name="q4" value="Insulin"> A. Insulin<br>
-      <input type="radio" name="q4" value="Adrenaline"> B. Adrenaline<br>
-      <input type="radio" name="q4" value="Thyroxine"> C. Thyroxine<br>
-      <input type="radio" name="q4" value="Testosterone"> D. Testosterone
-    </div>
-
-    <!-- Question 5 -->
-    <div class="question">
-      <p>5. Deficiency of vitamin C causes?</p>
-      <input type="radio" name="q5" value="Rickets"> A. Rickets<br>
-      <input type="radio" name="q5" value="Scurvy"> B. Scurvy<br>
-      <input type="radio" name="q5" value="Anaemia"> C. Anaemia<br>
-      <input type="radio" name="q5" value="Goitre"> D. Goitre
-    </div>
-
-    <!-- Question 6 -->
-    <div class="question">
-      <p>6. Which gas is produced during aerobic respiration?</p>
-      <input type="radio" name="q6" value="Oxygen"> A. Oxygen<br>
-      <input type="radio" name="q6" value="Carbon Dioxide"> B. Carbon Dioxide<br>
-      <input type="radio" name="q6" value="Nitrogen"> C. Nitrogen<br>
-      <input type="radio" name="q6" value="Hydrogen"> D. Hydrogen
-    </div>
-
-    <!-- Question 7 -->
-    <div class="question">
-      <p>7. The study of classification of living things is called?</p>
-      <input type="radio" name="q7" value="Ecology"> A. Ecology<br>
-      <input type="radio" name="q7" value="Taxonomy"> B. Taxonomy<br>
-      <input type="radio" name="q7" value="Physiology"> C. Physiology<br>
-      <input type="radio" name="q7" value="Genetics"> D. Genetics
-    </div>
-
-    <!-- Question 8 -->
-    <div class="question">
-      <p>8. Which of these is a protist?</p>
-      <input type="radio" name="q8" value="Amoeba"> A. Amoeba<br>
-      <input type="radio" name="q8" value="Paramecium"> B. Paramecium<br>
-      <input type="radio" name="q8" value="Algae"> C. Algae<br>
-      <input type="radio" name="q8" value="All of the above"> D. All of the above
-    </div>
-
-    <!-- Question 9 -->
-    <div class="question">
-      <p>9. Which part of the digestive system absorbs most nutrients?</p>
-      <input type="radio" name="q9" value="Stomach"> A. Stomach<br>
-      <input type="radio" name="q9" value="Small Intestine"> B. Small Intestine<br>
-      <input type="radio" name="q9" value="Large Intestine"> C. Large Intestine<br>
-      <input type="radio" name="q9" value="Esophagus"> D. Esophagus
-    </div>
-
-    <!-- Question 10 -->
-    <div class="question">
-      <p>10. Humans have how many pairs of chromosomes?</p>
-      <input type="radio" name="q10" value="23"> A. 23<br>
-      <input type="radio" name="q10" value="46"> B. 46<br>
-      <input type="radio" name="q10" value="22"> C. 22<br>
-      <input type="radio" name="q10" value="44"> D. 44
-    </div>
-
-    <!-- Continue adding questions 11–40 (from your previous lists and filled gaps) -->
-
-    <button type="submit">Submit Mock</button>
-  </form>
-  <p id="result"></p>
+<div class="result" id="resultBox"></div>
 </div>
 
 <script>
-// Correct answers for the 40 questions
-const answers = {
-  q1: "Meiosis",
-  q2: "Gymnosperms",
-  q3: "Nephron",
-  q4: "Insulin",
-  q5: "Scurvy",
-  q6: "Carbon Dioxide",
-  q7: "Taxonomy",
-  q8: "All of the above",
-  q9: "Small Intestine",
-  q10: "23",
-  // add all answers up to q40
-};
+const questions = [
+["Gas pressure in a closed container arises mainly because gas molecules",
+["possess mass","move randomly","collide elastically with the walls of the container","attract one another strongly"],2],
 
-const mockForm = document.getElementById("mockForm");
-const result = document.getElementById("result");
+["Which best explains why solids are almost incompressible?",
+["Particles vibrate about fixed positions","Very high kinetic energy","Negligible intermolecular forces","Random motion"],0],
 
-mockForm.addEventListener("submit", function(e){
-  e.preventDefault();
-  let score = 0;
-  for(let q in answers){
-    const selected = document.querySelector(`input[name="${q}"]:checked`);
-    if(selected && selected.value === answers[q]){
-      score++;
-    }
-  }
-  result.textContent = `You scored ${score} / 40!`;
-});
+["Increase in vapour pressure at constant temperature is due to",
+["decrease in evaporation","increase in condensation","more molecules escaping surface","fewer collisions"],2],
+
+["Which process reduces volume of liquid in an open container?",
+["Diffusion","Brownian motion","Evaporation","Condensation"],2],
+
+["Movement of liquid molecules into vapour phase at all temperatures is",
+["Brownian motion","Condensation","Evaporation","Liquefaction"],2],
+
+["Evaporation is fastest in a liquid with",
+["strong intermolecular forces","low vapour pressure","high average kinetic energy","high boiling point"],2],
+
+["Evaporation causes cooling because",
+["heat is released","low-energy molecules escape","high-energy molecules escape","condensation occurs"],2],
+
+["Correct statement about vapour pressure",
+["Decreases with temperature","Independent of temperature","Always equals atmospheric pressure","Increases till equilibrium"],3],
+
+["Dynamic equilibrium occurs when",
+["all liquid evaporates","vapour pressure equals atmosphere","evaporation rate equals condensation rate","condensation stops"],2],
+
+["Which does NOT affect evaporation?",
+["Surface area","Temperature","Nature of liquid","Volume"],3],
+
+["Solid changing directly to vapour is",
+["Melting","Evaporation","Sublimation","Condensation"],2],
+
+["Which substance sublimes?",
+["Sodium chloride","Ice","Camphor","Wax"],2],
+
+["Average kinetic energy depends on",
+["Pressure","Volume","Temperature","Mass"],2],
+
+["Temperature remains constant at melting point because",
+["Heat is lost","Kinetic energy decreases","Energy breaks bonds","Particles stop vibrating"],2],
+
+["Impurities usually",
+["Raise melting point","Lower melting point","Stop melting","Increase vapour pressure"],1],
+
+["Correct comparison of solid and liquid",
+["Solids have higher KE","Liquids more compressible","Liquids have fixed volume only","Solids flow easily"],2],
+
+["Correct statement about gases",
+["No collision","No wall force","Wall collisions cause pressure","Fixed positions"],2],
+
+["Increase in temperature causes",
+["Lower vapour pressure","Lower evaporation","Higher KE","Stronger forces"],2],
+
+["Boiling occurs when",
+["Evaporation stops","Vapour pressure equals atmospheric","KE is zero","Condensation dominates"],1],
+
+["Rapid evaporation favoured by",
+["High humidity","Low temperature","Large surface area","Strong attraction"],2]
+];
+
+let current = 0;
+let score = 0;
+const answers = [];
+
+function startTest(){
+  const name = document.getElementById("candidateName").value.trim();
+  if(name===""){alert("Enter your name");return;}
+  document.getElementById("startBox").style.display="none";
+  document.getElementById("questionBox").style.display="block";
+  document.getElementById("navBtns").style.display="flex";
+  document.getElementById("submitBtn").style.display="block";
+  loadQ();
+}
+
+function loadQ(){
+  const q = questions[current];
+  let html = `<h3>Question ${current+1}/${questions.length}</h3><p>${q[0]}</p>`;
+  q[1].forEach((opt,i)=>{
+    html += `<label><input type="radio" name="opt" onchange="answers[${current}]=${i}"> ${String.fromCharCode(65+i)}. ${opt}</label>`;
+  });
+  document.getElementById("questionBox").innerHTML = html;
+}
+
+function nextQ(){ if(current<questions.length-1){current++;loadQ();}}
+function prevQ(){ if(current>0){current--;loadQ();}}
+
+function submitTest(){
+  score = 0;
+  questions.forEach((q,i)=>{
+    if(answers[i] === q[2]) score++;
+  });
+  const name = document.getElementById("candidateName").value;
+  document.getElementById("questionBox").style.display="none";
+  document.getElementById("navBtns").style.display="none";
+  document.getElementById("submitBtn").style.display="none";
+
+  document.getElementById("resultBox").style.display="block";
+  document.getElementById("resultBox").innerHTML =
+    `<h2>Result</h2>
+     <p><strong>Name:</strong> ${name}</p>
+     <p><strong>Score:</strong> ${score} / ${questions.length}</p>`;
+}
 </script>
 </body>
-      </html>
+  </html>
