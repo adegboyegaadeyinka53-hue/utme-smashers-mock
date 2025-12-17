@@ -113,3 +113,145 @@ input {
 </div>
 </body>
     </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Mock Test</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h1>Biology Mock Test (40 Questions)</h1>
+  <form id="mockForm">
+    <!-- Question 1 -->
+    <div class="question">
+      <p>1. Which process produces gametes in humans?</p>
+      <input type="radio" name="q1" value="Mitosis"> A. Mitosis<br>
+      <input type="radio" name="q1" value="Meiosis"> B. Meiosis<br>
+      <input type="radio" name="q1" value="Fertilization"> C. Fertilization<br>
+      <input type="radio" name="q1" value="Binary Fission"> D. Binary Fission
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question">
+      <p>2. Plants that have seeds but no flowers are called?</p>
+      <input type="radio" name="q2" value="Gymnosperms"> A. Gymnosperms<br>
+      <input type="radio" name="q2" value="Angiosperms"> B. Angiosperms<br>
+      <input type="radio" name="q2" value="Ferns"> C. Ferns<br>
+      <input type="radio" name="q2" value="Bryophytes"> D. Bryophytes
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question">
+      <p>3. The functional unit of the kidney is called?</p>
+      <input type="radio" name="q3" value="Neuron"> A. Neuron<br>
+      <input type="radio" name="q3" value="Nephron"> B. Nephron<br>
+      <input type="radio" name="q3" value="Alveolus"> C. Alveolus<br>
+      <input type="radio" name="q3" value="Lobule"> D. Lobule
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question">
+      <p>4. Which hormone regulates blood sugar levels?</p>
+      <input type="radio" name="q4" value="Insulin"> A. Insulin<br>
+      <input type="radio" name="q4" value="Adrenaline"> B. Adrenaline<br>
+      <input type="radio" name="q4" value="Thyroxine"> C. Thyroxine<br>
+      <input type="radio" name="q4" value="Testosterone"> D. Testosterone
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question">
+      <p>5. Deficiency of vitamin C causes?</p>
+      <input type="radio" name="q5" value="Rickets"> A. Rickets<br>
+      <input type="radio" name="q5" value="Scurvy"> B. Scurvy<br>
+      <input type="radio" name="q5" value="Anaemia"> C. Anaemia<br>
+      <input type="radio" name="q5" value="Goitre"> D. Goitre
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question">
+      <p>6. Which gas is produced during aerobic respiration?</p>
+      <input type="radio" name="q6" value="Oxygen"> A. Oxygen<br>
+      <input type="radio" name="q6" value="Carbon Dioxide"> B. Carbon Dioxide<br>
+      <input type="radio" name="q6" value="Nitrogen"> C. Nitrogen<br>
+      <input type="radio" name="q6" value="Hydrogen"> D. Hydrogen
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question">
+      <p>7. The study of classification of living things is called?</p>
+      <input type="radio" name="q7" value="Ecology"> A. Ecology<br>
+      <input type="radio" name="q7" value="Taxonomy"> B. Taxonomy<br>
+      <input type="radio" name="q7" value="Physiology"> C. Physiology<br>
+      <input type="radio" name="q7" value="Genetics"> D. Genetics
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question">
+      <p>8. Which of these is a protist?</p>
+      <input type="radio" name="q8" value="Amoeba"> A. Amoeba<br>
+      <input type="radio" name="q8" value="Paramecium"> B. Paramecium<br>
+      <input type="radio" name="q8" value="Algae"> C. Algae<br>
+      <input type="radio" name="q8" value="All of the above"> D. All of the above
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question">
+      <p>9. Which part of the digestive system absorbs most nutrients?</p>
+      <input type="radio" name="q9" value="Stomach"> A. Stomach<br>
+      <input type="radio" name="q9" value="Small Intestine"> B. Small Intestine<br>
+      <input type="radio" name="q9" value="Large Intestine"> C. Large Intestine<br>
+      <input type="radio" name="q9" value="Esophagus"> D. Esophagus
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question">
+      <p>10. Humans have how many pairs of chromosomes?</p>
+      <input type="radio" name="q10" value="23"> A. 23<br>
+      <input type="radio" name="q10" value="46"> B. 46<br>
+      <input type="radio" name="q10" value="22"> C. 22<br>
+      <input type="radio" name="q10" value="44"> D. 44
+    </div>
+
+    <!-- Continue adding questions 11–40 (from your previous lists and filled gaps) -->
+
+    <button type="submit">Submit Mock</button>
+  </form>
+  <p id="result"></p>
+</div>
+
+<script>
+// Correct answers for the 40 questions
+const answers = {
+  q1: "Meiosis",
+  q2: "Gymnosperms",
+  q3: "Nephron",
+  q4: "Insulin",
+  q5: "Scurvy",
+  q6: "Carbon Dioxide",
+  q7: "Taxonomy",
+  q8: "All of the above",
+  q9: "Small Intestine",
+  q10: "23",
+  // add all answers up to q40
+};
+
+const mockForm = document.getElementById("mockForm");
+const result = document.getElementById("result");
+
+mockForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  let score = 0;
+  for(let q in answers){
+    const selected = document.querySelector(`input[name="${q}"]:checked`);
+    if(selected && selected.value === answers[q]){
+      score++;
+    }
+  }
+  result.textContent = `You scored ${score} / 40!`;
+});
+</script>
+</body>
+      </html>
