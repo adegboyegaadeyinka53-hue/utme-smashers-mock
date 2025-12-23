@@ -1,41 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>UTME SMASHERS TUTORIAL – CBT Mock</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>UTME SMASHERS TUTORIAL – CBT Mock</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #fff;
+}
+header {
+  background: #000;
+  padding: 15px;
+  text-align: center;
+}
+header h1 {
+  color: #ffd700;
+  margin: 0;
+}
+header img {
+  height: 60px;
+  display: block;
+  margin: 10px auto;
+}
+.container {
+  padding: 20px;
+}
+.card {
+  background: rgba(0,0,0,0.8);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: auto;
+}
+button {
+  background: #ffd700;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: none;
+}
+.timer {
+  color: #ffd700;
+  font-weight: bold;
+  text-align: right;
+  margin-bottom: 10px;
+}
+.question {
+  margin-bottom: 20px;
+}
+.options label {
+  display: block;
+  margin: 5px 0;
+  cursor: pointer;
+}
+.results, .participant-scores {
+  margin-top: 20px;
+  background: rgba(255, 215, 0, 0.1);
+  color: #000;
+  padding: 15px;
+  border-radius: 10px;
+}
+</style>
 </head>
-
 <body>
-  <div class="login-box">
-    <h1>UTME SMASHERS TUTORIAL</h1>
-    <p>JAMB CBT MOCK EXAM</p>
 
-    <input type="text" id="name" placeholder="Enter Full Name" required>
-    <input type="email" id="email" placeholder="Enter Email Address" required>
+<header>
+  <img src="YOUR_DESIGN_LOGO.png" alt="UTME SMASHERS Logo">
+  <h1>UTME SMASHERS TUTORIAL</h1>
+  <p>JAMB CBT MOCK</p>
+</header>
 
+<div class="container">
+  <div class="card" id="login-card">
+    <h2>Candidate Login</h2>
+    <input id="name" placeholder="Full Name">
+    <input id="email" placeholder="Email Address">
     <button onclick="startTest()">Start Mock Test</button>
   </div>
 
+  <div class="card" id="test-card" style="display:none;">
+    <div class="timer" id="timer">Time Left: 02:00:00</div>
+    <div id="question-container"></div>
+    <button id="next-btn" onclick="nextQuestion()">Next</button>
+    <button id="submit-btn" onclick="submitTest()" style="display:none;">Submit Test</button>
+  </div>
+
+  <div class="card" id="results-card" style="display:none;">
+    <h2>Test Results</h2>
+    <div class="results" id="results"></div>
+    <div class="participant-scores">
+      <h3>Participant Scores</h3>
+      <ul id="participant-list"></ul>
+    </div>
+  </div>
+</div>
+
 <script>
-  function startTest() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
+// ======================= Questions =========================
+const questions = [
+  // ----- ENGLISH 1-40 -----
+  {
+    question: "Despite his calm appearance, he was ______ with anger.",
+    options: ["boiling","seething","roasting","heating"]
+  },
+  {
+    question: "The principal warned that students who arrived late would be ______ punished.",
+    options: ["seriously","severely","sharply","strongly"]
+  },
+  {
+    question: "The manager accused the cashier of ______ the company’s funds.",
+    options: ["embezzling","burgling","hijacking","abducting"]
+  },
+  {
+    question: "The meeting was postponed ______ the chairman’s absence.",
+    options: ["because","owing to","due","since"]
+  },
+  {
+    question: "The teacher spoke so fast that most students could hardly ______ what he was saying.",
+    options: ["grasp","grip","seize","hold"]
+  },
+  {
+    question: "“The boy is as stubborn as a mule.” The boy:",
+    options: ["is physically strong","is extremely foolish","refuses to change his mind","works very hard"]
+  },
+  {
+    question: "The doctor advised him to abstain ______ smoking.",
+    options: ["from","of","with","against"]
+  },
+  {
+    question: "The witness’s statement was full of ______ and could not be relied upon.",
+    options: ["contradictions","conflicts","oppositions","differences"]
+  },
+  {
+    question: "Choose the word nearest in meaning to 'meticulous'.",
+    options: ["careless","thorough","hasty","ordinary"]
+  },
+  {
+    question: "The football match was cancelled because of the ______ rain.",
+    options: ["heavy","strong","thick","loud"]
+  },
+  // ... continue adding all English 11-40
+  // ----- CHEMISTRY 41-80 -----
+  {
+    question: "Zinc oxide is a",
+    options: ["basic oxide","acidic oxide","amphoteric oxide","neutral oxide","reactive oxide"]
+  },
+  {
+    question: "Which of the following metals cannot replace hydrogen from water or steam?",
+    options: ["sodium","magnesium","iron","calcium","copper"]
+  },
+  {
+    question: "Which of the following contains two amphoteric oxides?",
+    options: ["sodium oxide and zinc oxide","aluminium oxide and calcium oxide","zinc oxide and potassium oxide","aluminium oxide and zinc oxide","magnesium oxide and zinc oxide"]
+  },
+  // ..<script>
+const chemistryQuestions = [
+  {q:"Zinc oxide is a", options:["basic oxide","acidic oxide","amphoteric oxide","neutral oxide","reactive oxide"], answer:"basic oxide"},
+  {q:"Which of the following metals cannot replace hydrogen from water or steam?", options:["sodium","magnesium","iron","calcium","copper"], answer:"copper"},
+  {q:"Which of the following contains two amphoteric oxides?", options:["sodium oxide and zinc oxide","aluminium oxide and calcium oxide","zinc oxide and potassium oxide","aluminium oxide and zinc oxide","magnesium oxide and zinc oxide"], answer:"aluminium oxide and zinc oxide"},
+  {q:"A sample of temporary hard water can be prepared in the laboratory by", options:["dissolving calcium chloride in distilled water","saturating limewater with carbon(IV) oxide","saturating distilled water with calcium hydroxide","dissolving sodium hydrogen trioxocarbonate(IV) in distilled water"], answer:"saturating limewater with carbon(IV) oxide"},
+  {q:"A property of a colloidal dispersion which a true solution does not possess is", options:["the Tyndall effect","homogeneity","osmotic pressure","surface polarity"], answer:"the Tyndall effect"},
+  {q:"Which of the following combinations of gases is suitable for demonstrating the fountain experiment?", options:["sulphur(IV) oxide and hydrogen chloride","carbon(IV) oxide and ammonia","ammonia and hydrogen chloride","carbon(IV) oxide and sulphur(IV) oxide"], answer:"ammonia and hydrogen chloride"},
+  {q:"One of the advantages of detergents over soap is that detergents", options:["are easier to manufacture","foam more than soap","form soluble salts with hard water","deter germs better than soap"], answer:"form soluble salts with hard water"},
+  {q:"Water for town supply is chlorinated mainly to remove", options:["bad odour","bacteria","temporary hardness","permanent hardness"], answer:"bacteria"},
+  {q:"On which of the following does the solubility of a gas depend?", options:["I, II, III and IV","I and II only","II only","I, III and IV only"], answer:"I, III and IV only"},
+  {q:"An emulsion paint consists of", options:["gas or liquid particles dispersed in liquid","liquid particles dispersed in liquid","solid particles dispersed in liquid","solid particles dispersed in solid"], answer:"liquid particles dispersed in liquid"},
+  {q:"Water can be identified using", options:["anhydrous copper(II) tetraoxosulphate(VI)","anhydrous sodium trioxocarbonate(IV)","potassium heptaoxodichromate(VI)","copper(II) trioxocarbonate(IV)"], answer:"anhydrous copper(II) tetraoxosulphate(VI)"},
+  {q:"The loss of water of crystallization by sodium trioxocarbonate(IV) decahydrate on exposure to air is known as", options:["deliquescence","effervescence","efflorescence","sublimation"], answer:"efflorescence"},
+  {q:"Which of the following statements about gases is correct?", options:["increasing temperature increases the number of gas molecules","increase in kinetic energy does not affect gas molecules","increase in pressure is proportional to increase in volume at constant temperature","decrease in pressure decreases the number of gas molecules"], answer:"increase in pressure is proportional to increase in volume at constant temperature"},
+  {q:"The vapour density of a gas is defined as", options:["mass of a unit volume of water vapour","mass of a unit volume of the gas compared with an equal volume of hydrogen","mass of a unit volume of the gas compared with oxygen","mass of a unit volume of the gas minus vapour pressure","twice the relative molecular mass of the gas"], answer:"mass of a unit volume of the gas compared with an equal volume of hydrogen"},
+  {q:"When chlorine gas is passed into a solution of sulphur(IV) oxide,", options:["sulphur(IV) oxide is reduced to sulphur","chlorine is oxidized to hydrochloric acid","dilute sulphuric acid and hydrochloric acid are produced","hydrochloric acid and sulphur are produced","sulphur(VI) oxide is the only product"], answer:"sulphur(VI) oxide is the only product"},
+  {q:"Which nitrogen compound forms an aqueous solution with pH less than 7?", options:["N₂O","NO","NO₂","NaNO₃","NH₃"], answer:"NO₂"},
+  {q:"If the temperature of a gas increases, the kinetic energy of its molecules will", options:["increase","decrease","remain the same","become zero"], answer:"increase"},
+  {q:"If the volume of a gas decreases, the pressure will", options:["increase","decrease","remain the same","become zero"], answer:"increase"},
+  {q:"Oxygen reacts with 50 cm³ of hydrogen. After passing the mixture through calcium chloride, the volume of the remaining gas is", options:["5 cm³","25 cm³","50 cm³","75 cm³","100 cm³"], answer:"25 cm³"},
+  {q:"Which relationship between pressure (P), volume (V), and temperature (T) represents ideal gas behaviour?", options:["P ∝ V/T","P ∝ T/V","PV ∝ T","P ∝ V","V ∝ T"], answer:"P ∝ T/V"},
+  {q:"In the manufacture of ammonia: N₂ + 3H₂ ⇌ 2NH₃ ΔH<0 The yield of ammonia increases when", options:["pressure decreases","temperature decreases","pressure increases","temperature increases","temperature remains constant"], answer:"pressure increases"},
+  {q:"For the equilibrium N₂ + O₂ ⇌ 2NO an increase in pressure will", options:["favour nitrogen","favour oxygen","favour nitric oxide","favour reactants only","have no effect"], answer:"favour nitric oxide"},
+  {q:"Which condition increases the rate of a chemical reaction?", options:["decrease in temperature","increase in concentration only","increase in temperature, catalyst, surface area","decrease in surface area","absence of light"], answer:"increase in temperature, catalyst, surface area"},
+  {q:"Zn + H₂SO₄ → ZnSO₄ + H₂ The reaction rate increases greatly when", options:["zinc is powdered","large volume of acid is used","small volume of acid is used","reaction is cooled","zinc is in pellets"], answer:"zinc is powdered"},
+  {q:"The following results were obtained for the liberation of iodine at different temperatures: rate doubles for every 10°C rise, time halves for 10°C rise. This shows that", options:["rate doubles for every 10°C rise","rate halves for every 10°C rise","temperature has no effect","rate triples for every 10°C rise"], answer:"rate doubles for every 10°C rise"},
+  {q:"Which property increases across a period in the periodic table?", options:["atomic radius","metallic character","ionization energy","electropositivity","shielding effect"], answer:"ionization energy"},
+  {q:"Elements in the same group have the same", options:["atomic number","mass number","number of shells","number of valence electrons","melting point"], answer:"number of valence electrons"},
+  {q:"Which of the following elements has the highest electronegativity?", options:["sodium","aluminium","chlorine","magnesium","silicon"], answer:"chlorine"},
+  {q:"An element with atomic number 17 belongs to", options:["group I","group II","group VI","group VII","group VIII"], answer:"group VII"},
+  {q:"Which of the following is a transition metal?", options:["sodium","calcium","iron","aluminium","potassium"], answer:"iron"},
+  {q:"The bond formed by complete transfer of electrons is", options:["covalent bond","dative bond","metallic bond","ionic bond","hydrogen bond"], answer:"ionic bond"},
+  {q:"Which substance contains only covalent bonds?", options:["sodium chloride","calcium oxide","ammonia","magnesium chloride","potassium bromide"], answer:"ammonia"},
+  {q:"A dative covalent bond is formed when", options:["electrons are shared equally","one atom donates both electrons","electrons are transferred","protons are shared","atoms collide"], answer:"one atom donates both electrons"},
+  {q:"Which compound exhibits hydrogen bonding?", options:["methane","hydrogen sulphide","ammonia","hydrogen chloride","carbon dioxide"], answer:"ammonia"},
+  {q:"Metallic bonding is best described as", options:["sharing of electrons","attraction between ions","electrostatic attraction between metal ions and free electrons","attraction between molecules","overlap of orbitals"], answer:"electrostatic attraction between metal ions and free electrons"},
+  {q:"Which property makes water a good coolant?", options:["low boiling point","low density","high specific heat capacity","low viscosity","poor conductivity"], answer:"high specific heat capacity"},
+  {q:"Temporary hardness of water is caused by", options:["calcium sulphate","magnesium chloride","calcium hydrogen trioxocarbonate(IV)","sodium chloride","potassium nitrate"], answer:"calcium hydrogen trioxocarbonate(IV)"},
+  {q:"Permanent hardness of water can be removed by", options:["boiling","filtration","addition of soap","addition of washing soda","sedimentation"], answer:"boiling"},
+  {q:"Which substance is used to test for the presence of water?", options:["blue litmus paper","potassium permanganate","anhydrous copper(II) tetraoxosulphate(VI)","sodium hydroxide","calcium carbonate"], answer:"anhydrous copper(II) tetraoxosulphate(VI)"},
+  {q:"Which method is suitable for obtaining pure water from seawater?", options:["filtration","evaporation","sedimentation","distillation","crystallization"], answer:"distillation"}
+];
 
-    if (name === "" || email === "") {
-      alert("Please enter your name and email");
-      return;
-    }
+// Combine with previous sections
+const allQuestions = [...questions, ...physicsQuestions, ...chemistryQuestions];
+totalQuestions = allQuestions.length; // now 120 questions
 
-    localStorage.setItem("candidateName", name);
-    localStorage.setItem("candidateEmail", email);
+function showQuestion(){
+  const q = allQuestions[currentQuestion];
+  const container = document.getElementById('question-container');
+  let html = `<h3>Question ${currentQuestion+1}: ${q.q}</h3><div class="options">`;
+  q.options.forEach((opt,i)=>{
+    html += `<label><input type="radio" name="option" value="${opt}"> ${opt}</label><br>`;
+  });
+  html += `</div>`;
+  container.innerHTML = html;
+}
+</script>. continue adding all Chemistry 4️⃣1-80
+  // ----- BIOLOGY 81-120 -----
+  {
+    question: "Which of the following hormones is responsible for leaf fall in plants?",
+    options: ["Auxin","Gibberellin","Abscisic acid","Cytokinin"]
+  },
+  // ... c<script>
+const biologyQuestions = [
+  {q:"Which of the following hormones is responsible for leaf fall in plants?", options:["Auxin","Gibberellin","Abscisic acid","Cytokinin"], answer:"Abscisic acid"},
+  {q:"Which structure in plant cells is responsible for photosynthesis?", options:["Mitochondria","Ribosome","Chloroplast","Nucleus"], answer:"Chloroplast"},
+  {q:"The function of the cambium in plants is", options:["nutrient absorption","water transport","secondary growth","photosynthesis"], answer:"secondary growth"},
+  {q:"In DNA, adenine pairs with", options:["cytosine","thymine","guanine","uracil"], answer:"thymine"},
+  {q:"Which process ensures genetic variation during meiosis?", options:["Cytokinesis","DNA replication","Crossing over","Mitosis"], answer:"Crossing over"},
+  {q:"A dihybrid cross between two heterozygotes produces offspring in the ratio", options:["1 : 2 : 1","3 : 1","9 : 3 : 3 : 1","1 : 1"], answer:"9 : 3 : 3 : 1"},
+  {q:"The presence of a notochord is a characteristic feature of", options:["Arthropoda","Mollusca","Chordata","Echinodermata"], answer:"Chordata"},
+  {q:"Which of the following organisms belongs to the kingdom Protista?", options:["Earthworm","Mushroom","Amoeba","Frog"], answer:"Amoeba"},
+  {q:"All members of kingdom Monera are", options:["multicellular and photosynthetic","unicellular and prokaryotic","heterotrophic and eukaryotic","parasitic and multicellular"], answer:"unicellular and prokaryotic"},
+  {q:"Which phylum of animals possesses a water vascular system?", options:["Mollusca","Echinodermata","Annelida","Arthropoda"], answer:"Echinodermata"},
+  {q:"Which class of animals has a four-chambered heart?", options:["Amphibians","Reptiles","Mammals","Fish"], answer:"Mammals"},
+  {q:"The part of the mammalian brain that controls breathing and heartbeat is the", options:["cerebrum","cerebellum","medulla oblongata","hypothalamus"], answer:"medulla oblongata"},
+  {q:"Which part of the mammalian eye controls the amount of light entering the eye?", options:["retina","iris","lens","cornea"], answer:"iris"},
+  {q:"Haemophilia is a disorder associated with", options:["white blood cells","platelets","blood clotting","red blood cells"], answer:"blood clotting"},
+  {q:"The most abundant type of white blood cell in humans is", options:["monocyte","lymphocyte","eosinophil","neutrophil"], answer:"neutrophil"},
+  {q:"Which of the following is an example of passive immunity?", options:["vaccination","recovery from infection","breastfeeding","allergy"], answer:"breastfeeding"},
+  {q:"Which gas is released during anaerobic respiration in yeast?", options:["oxygen","nitrogen","carbon dioxide","methane"], answer:"carbon dioxide"},
+  {q:"Which of the following occurs during anaerobic respiration in muscles?", options:["production of oxygen","production of lactic acid","breakdown of ethanol","use of carbon dioxide"], answer:"production of lactic acid"},
+  {q:"The final electron acceptor in aerobic respiration is", options:["ATP","glucose","oxygen","carbon dioxide"], answer:"oxygen"},
+  {q:"In a food chain, energy transfer is usually limited to", options:["two trophic levels","three trophic levels","four trophic levels","five trophic levels"], answer:"four trophic levels"},
+  {q:"The main function of ribosomes in the cell is", options:["energy production","protein synthesis","lipid storage","DNA replication"], answer:"protein synthesis"},
+  {q:"Which of the following is NOT a characteristic of enzymes?", options:["specificity","reusability","alteration of reaction equilibrium","lowering of activation energy"], answer:"alteration of reaction equilibrium"},
+  {q:"In flowering plants, double fertilization involves", options:["two sperm cells fertilizing two egg cells","one sperm fertilizing the egg and the other fusing with polar nuclei","one sperm fertilizing the ovule and the other the ovary","two pollen grains fertilizing two ovules"], answer:"one sperm fertilizing the egg and the other fusing with polar nuclei"},
+  {q:"In humans, implantation of the fertilized egg occurs in the", options:["ovary","fallopian tube","uterus","cervix"], answer:"uterus"},
+  {q:"Which hormone is responsible for the development of secondary sexual characteristics in males?", options:["estrogen","testosterone","progesterone","luteinizing hormone"], answer:"testosterone"},
+  {q:"The enzyme responsible for protein digestion in the stomach is", options:["amylase","pepsin","lipase","maltase"], answer:"pepsin"},
+  {q:"Bile is produced by the", options:["gall bladder","pancreas","stomach","liver"], answer:"liver"},
+  {q:"Which of the following structures is responsible for excretion in flatworms?", options:["flame cells","nephridia","malpighian tubules","kidneys"], answer:"flame cells"},
+  {q:"Urea is produced mainly in the", options:["lungs","kidney","skin","liver"], answer:"liver"},
+  {q:"The functional unit of the kidney is the", options:["alveolus","nephron","neuron","villus"], answer:"nephron"},
+  {q:"Which of the following processes does NOT occur in the nephron?", options:["filtration","reabsorption","respiration","secretion"], answer:"respiration"},
+  {q:"The theory of natural selection was proposed by", options:["Gregor Mendel","Charles Darwin","Carl Linnaeus","Louis Pasteur"], answer:"Charles Darwin"},
+  {q:"Which of the following is evidence of organic evolution?", options:["genetic engineering","fossil records","cloning","mutation"], answer:"fossil records"},
+  {q:"Night blindness is caused by deficiency of", options:["vitamin B₁","vitamin D","vitamin A","vitamin C"], answer:"vitamin A"},
+  {q:"Which disease is transmitted by the female Anopheles mosquito?", options:["sleeping sickness","yellow fever","malaria","cholera"], answer:"malaria"},
+  {q:"Kwashiorkor is caused mainly by", options:["vitamin deficiency","protein deficiency","calcium deficiency","carbohydrate deficiency"], answer:"protein deficiency"},
+  {q:"The hormone insulin is secreted by the", options:["adrenal gland","thyroid gland","pancreas","pituitary gland"], answer:"pancreas"},
+  {q:"Over-secretion of growth hormone in children leads to", options:["dwarfism","goitre","gigantism","acromegaly"], answer:"gigantism"},
+  {q:"Which of the following organs is responsible for coordination in mammals?", options:["cerebrum","cerebellum","medulla","spinal cord"], answer:"cerebellum"},
+  {q:"Which of the following systems transports digested food in humans?", options:["respiratory system","excretory system","circulatory system","skeletal system"], answer:"circulatory system"}
+];
 
-    window.location.href = "test.html";
-  }
-</script>
-</body>
-</html><script>
+// Combine with previous sections
+allQuestions.push(...biologyQuestions);
+totalQuestions = allQuestions.length; // now 160 questions
+  </script>ontinue adding all Biology 82-120
+  // ----- PHYSICS 121-160 -----
+  {
+    question: "A body starts from rest and moves with uniform acceleration. If it covers 20 m in the first 2 s, how far will it cover in the next 2 s?",
+    options: ["20 m","40 m","60 m","80 m"]
+  },
+  // ... <script>
 const physicsQuestions = [
   // EQUATIONS OF LINEAR MOTION (12 questions)
   {q:"A body starts from rest and moves with uniform acceleration. If it covers 20 m in the first 2 s, how far will it cover in the next 2 s?",
@@ -144,109 +390,84 @@ function showQuestion(){
   html += `</div>`;
   container.innerHTML = html;
 }
-</script><script>
-const chemistryQuestions = [
-  {q:"Zinc oxide is a", options:["basic oxide","acidic oxide","amphoteric oxide","neutral oxide","reactive oxide"], answer:"basic oxide"},
-  {q:"Which of the following metals cannot replace hydrogen from water or steam?", options:["sodium","magnesium","iron","calcium","copper"], answer:"copper"},
-  {q:"Which of the following contains two amphoteric oxides?", options:["sodium oxide and zinc oxide","aluminium oxide and calcium oxide","zinc oxide and potassium oxide","aluminium oxide and zinc oxide","magnesium oxide and zinc oxide"], answer:"aluminium oxide and zinc oxide"},
-  {q:"A sample of temporary hard water can be prepared in the laboratory by", options:["dissolving calcium chloride in distilled water","saturating limewater with carbon(IV) oxide","saturating distilled water with calcium hydroxide","dissolving sodium hydrogen trioxocarbonate(IV) in distilled water"], answer:"saturating limewater with carbon(IV) oxide"},
-  {q:"A property of a colloidal dispersion which a true solution does not possess is", options:["the Tyndall effect","homogeneity","osmotic pressure","surface polarity"], answer:"the Tyndall effect"},
-  {q:"Which of the following combinations of gases is suitable for demonstrating the fountain experiment?", options:["sulphur(IV) oxide and hydrogen chloride","carbon(IV) oxide and ammonia","ammonia and hydrogen chloride","carbon(IV) oxide and sulphur(IV) oxide"], answer:"ammonia and hydrogen chloride"},
-  {q:"One of the advantages of detergents over soap is that detergents", options:["are easier to manufacture","foam more than soap","form soluble salts with hard water","deter germs better than soap"], answer:"form soluble salts with hard water"},
-  {q:"Water for town supply is chlorinated mainly to remove", options:["bad odour","bacteria","temporary hardness","permanent hardness"], answer:"bacteria"},
-  {q:"On which of the following does the solubility of a gas depend?", options:["I, II, III and IV","I and II only","II only","I, III and IV only"], answer:"I, III and IV only"},
-  {q:"An emulsion paint consists of", options:["gas or liquid particles dispersed in liquid","liquid particles dispersed in liquid","solid particles dispersed in liquid","solid particles dispersed in solid"], answer:"liquid particles dispersed in liquid"},
-  {q:"Water can be identified using", options:["anhydrous copper(II) tetraoxosulphate(VI)","anhydrous sodium trioxocarbonate(IV)","potassium heptaoxodichromate(VI)","copper(II) trioxocarbonate(IV)"], answer:"anhydrous copper(II) tetraoxosulphate(VI)"},
-  {q:"The loss of water of crystallization by sodium trioxocarbonate(IV) decahydrate on exposure to air is known as", options:["deliquescence","effervescence","efflorescence","sublimation"], answer:"efflorescence"},
-  {q:"Which of the following statements about gases is correct?", options:["increasing temperature increases the number of gas molecules","increase in kinetic energy does not affect gas molecules","increase in pressure is proportional to increase in volume at constant temperature","decrease in pressure decreases the number of gas molecules"], answer:"increase in pressure is proportional to increase in volume at constant temperature"},
-  {q:"The vapour density of a gas is defined as", options:["mass of a unit volume of water vapour","mass of a unit volume of the gas compared with an equal volume of hydrogen","mass of a unit volume of the gas compared with oxygen","mass of a unit volume of the gas minus vapour pressure","twice the relative molecular mass of the gas"], answer:"mass of a unit volume of the gas compared with an equal volume of hydrogen"},
-  {q:"When chlorine gas is passed into a solution of sulphur(IV) oxide,", options:["sulphur(IV) oxide is reduced to sulphur","chlorine is oxidized to hydrochloric acid","dilute sulphuric acid and hydrochloric acid are produced","hydrochloric acid and sulphur are produced","sulphur(VI) oxide is the only product"], answer:"sulphur(VI) oxide is the only product"},
-  {q:"Which nitrogen compound forms an aqueous solution with pH less than 7?", options:["N₂O","NO","NO₂","NaNO₃","NH₃"], answer:"NO₂"},
-  {q:"If the temperature of a gas increases, the kinetic energy of its molecules will", options:["increase","decrease","remain the same","become zero"], answer:"increase"},
-  {q:"If the volume of a gas decreases, the pressure will", options:["increase","decrease","remain the same","become zero"], answer:"increase"},
-  {q:"Oxygen reacts with 50 cm³ of hydrogen. After passing the mixture through calcium chloride, the volume of the remaining gas is", options:["5 cm³","25 cm³","50 cm³","75 cm³","100 cm³"], answer:"25 cm³"},
-  {q:"Which relationship between pressure (P), volume (V), and temperature (T) represents ideal gas behaviour?", options:["P ∝ V/T","P ∝ T/V","PV ∝ T","P ∝ V","V ∝ T"], answer:"P ∝ T/V"},
-  {q:"In the manufacture of ammonia: N₂ + 3H₂ ⇌ 2NH₃ ΔH<0 The yield of ammonia increases when", options:["pressure decreases","temperature decreases","pressure increases","temperature increases","temperature remains constant"], answer:"pressure increases"},
-  {q:"For the equilibrium N₂ + O₂ ⇌ 2NO an increase in pressure will", options:["favour nitrogen","favour oxygen","favour nitric oxide","favour reactants only","have no effect"], answer:"favour nitric oxide"},
-  {q:"Which condition increases the rate of a chemical reaction?", options:["decrease in temperature","increase in concentration only","increase in temperature, catalyst, surface area","decrease in surface area","absence of light"], answer:"increase in temperature, catalyst, surface area"},
-  {q:"Zn + H₂SO₄ → ZnSO₄ + H₂ The reaction rate increases greatly when", options:["zinc is powdered","large volume of acid is used","small volume of acid is used","reaction is cooled","zinc is in pellets"], answer:"zinc is powdered"},
-  {q:"The following results were obtained for the liberation of iodine at different temperatures: rate doubles for every 10°C rise, time halves for 10°C rise. This shows that", options:["rate doubles for every 10°C rise","rate halves for every 10°C rise","temperature has no effect","rate triples for every 10°C rise"], answer:"rate doubles for every 10°C rise"},
-  {q:"Which property increases across a period in the periodic table?", options:["atomic radius","metallic character","ionization energy","electropositivity","shielding effect"], answer:"ionization energy"},
-  {q:"Elements in the same group have the same", options:["atomic number","mass number","number of shells","number of valence electrons","melting point"], answer:"number of valence electrons"},
-  {q:"Which of the following elements has the highest electronegativity?", options:["sodium","aluminium","chlorine","magnesium","silicon"], answer:"chlorine"},
-  {q:"An element with atomic number 17 belongs to", options:["group I","group II","group VI","group VII","group VIII"], answer:"group VII"},
-  {q:"Which of the following is a transition metal?", options:["sodium","calcium","iron","aluminium","potassium"], answer:"iron"},
-  {q:"The bond formed by complete transfer of electrons is", options:["covalent bond","dative bond","metallic bond","ionic bond","hydrogen bond"], answer:"ionic bond"},
-  {q:"Which substance contains only covalent bonds?", options:["sodium chloride","calcium oxide","ammonia","magnesium chloride","potassium bromide"], answer:"ammonia"},
-  {q:"A dative covalent bond is formed when", options:["electrons are shared equally","one atom donates both electrons","electrons are transferred","protons are shared","atoms collide"], answer:"one atom donates both electrons"},
-  {q:"Which compound exhibits hydrogen bonding?", options:["methane","hydrogen sulphide","ammonia","hydrogen chloride","carbon dioxide"], answer:"ammonia"},
-  {q:"Metallic bonding is best described as", options:["sharing of electrons","attraction between ions","electrostatic attraction between metal ions and free electrons","attraction between molecules","overlap of orbitals"], answer:"electrostatic attraction between metal ions and free electrons"},
-  {q:"Which property makes water a good coolant?", options:["low boiling point","low density","high specific heat capacity","low viscosity","poor conductivity"], answer:"high specific heat capacity"},
-  {q:"Temporary hardness of water is caused by", options:["calcium sulphate","magnesium chloride","calcium hydrogen trioxocarbonate(IV)","sodium chloride","potassium nitrate"], answer:"calcium hydrogen trioxocarbonate(IV)"},
-  {q:"Permanent hardness of water can be removed by", options:["boiling","filtration","addition of soap","addition of washing soda","sedimentation"], answer:"boiling"},
-  {q:"Which substance is used to test for the presence of water?", options:["blue litmus paper","potassium permanganate","anhydrous copper(II) tetraoxosulphate(VI)","sodium hydroxide","calcium carbonate"], answer:"anhydrous copper(II) tetraoxosulphate(VI)"},
-  {q:"Which method is suitable for obtaining pure water from seawater?", options:["filtration","evaporation","sedimentation","distillation","crystallization"], answer:"distillation"}
+  </script>continue adding all Physics 122-160
 ];
 
-// Combine with previous sections
-const allQuestions = [...questions, ...physicsQuestions, ...chemistryQuestions];
-totalQuestions = allQuestions.length; // now 120 questions
+// ======================= Test Logic =======================
+let currentQuestion = 0;
+let userAnswers = [];
+let participants = JSON.parse(localStorage.getItem("participants")) || [];
+let timerInterval;
+let timeLeft = 2*60*60; // 2 hours in seconds
+
+function startTest() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  if(!name || !email){
+    alert("Please enter your full name and email");
+    return;
+  }
+  localStorage.setItem("currentCandidate", JSON.stringify({name,email}));
+  document.getElementById("login-card").style.display = "none";
+  document.getElementById("test-card").style.display = "block";
+  showQuestion();
+  startTimer();
+}
 
 function showQuestion(){
-  const q = allQuestions[currentQuestion];
-  const container = document.getElementById('question-container');
-  let html = `<h3>Question ${currentQuestion+1}: ${q.q}</h3><div class="options">`;
-  q.options.forEach((opt,i)=>{
-    html += `<label><input type="radio" name="option" value="${opt}"> ${opt}</label><br>`;
-  });
-  html += `</div>`;
-  container.innerHTML = html;
+  const q = questions[currentQuestion];
+  const container = document.getElementById("question-container");
+  container.innerHTML = `<div class="question"><strong>Q${currentQuestion+1}:</strong> ${q.question}</div>
+  <div class="options">${q.options.map((opt,i)=>`<label><input type="radio" name="option" value="${opt}"> ${opt}</label>`).join("")}</div>`;
+  document.getElementById("next-btn").style.display = currentQuestion === questions.length-1 ? "none" : "inline-block";
+  document.getElementById("submit-btn").style.display = currentQuestion === questions.length-1 ? "inline-block" : "none";
 }
-  </script><script>
-const biologyQuestions = [
-  {q:"Which of the following hormones is responsible for leaf fall in plants?", options:["Auxin","Gibberellin","Abscisic acid","Cytokinin"], answer:"Abscisic acid"},
-  {q:"Which structure in plant cells is responsible for photosynthesis?", options:["Mitochondria","Ribosome","Chloroplast","Nucleus"], answer:"Chloroplast"},
-  {q:"The function of the cambium in plants is", options:["nutrient absorption","water transport","secondary growth","photosynthesis"], answer:"secondary growth"},
-  {q:"In DNA, adenine pairs with", options:["cytosine","thymine","guanine","uracil"], answer:"thymine"},
-  {q:"Which process ensures genetic variation during meiosis?", options:["Cytokinesis","DNA replication","Crossing over","Mitosis"], answer:"Crossing over"},
-  {q:"A dihybrid cross between two heterozygotes produces offspring in the ratio", options:["1 : 2 : 1","3 : 1","9 : 3 : 3 : 1","1 : 1"], answer:"9 : 3 : 3 : 1"},
-  {q:"The presence of a notochord is a characteristic feature of", options:["Arthropoda","Mollusca","Chordata","Echinodermata"], answer:"Chordata"},
-  {q:"Which of the following organisms belongs to the kingdom Protista?", options:["Earthworm","Mushroom","Amoeba","Frog"], answer:"Amoeba"},
-  {q:"All members of kingdom Monera are", options:["multicellular and photosynthetic","unicellular and prokaryotic","heterotrophic and eukaryotic","parasitic and multicellular"], answer:"unicellular and prokaryotic"},
-  {q:"Which phylum of animals possesses a water vascular system?", options:["Mollusca","Echinodermata","Annelida","Arthropoda"], answer:"Echinodermata"},
-  {q:"Which class of animals has a four-chambered heart?", options:["Amphibians","Reptiles","Mammals","Fish"], answer:"Mammals"},
-  {q:"The part of the mammalian brain that controls breathing and heartbeat is the", options:["cerebrum","cerebellum","medulla oblongata","hypothalamus"], answer:"medulla oblongata"},
-  {q:"Which part of the mammalian eye controls the amount of light entering the eye?", options:["retina","iris","lens","cornea"], answer:"iris"},
-  {q:"Haemophilia is a disorder associated with", options:["white blood cells","platelets","blood clotting","red blood cells"], answer:"blood clotting"},
-  {q:"The most abundant type of white blood cell in humans is", options:["monocyte","lymphocyte","eosinophil","neutrophil"], answer:"neutrophil"},
-  {q:"Which of the following is an example of passive immunity?", options:["vaccination","recovery from infection","breastfeeding","allergy"], answer:"breastfeeding"},
-  {q:"Which gas is released during anaerobic respiration in yeast?", options:["oxygen","nitrogen","carbon dioxide","methane"], answer:"carbon dioxide"},
-  {q:"Which of the following occurs during anaerobic respiration in muscles?", options:["production of oxygen","production of lactic acid","breakdown of ethanol","use of carbon dioxide"], answer:"production of lactic acid"},
-  {q:"The final electron acceptor in aerobic respiration is", options:["ATP","glucose","oxygen","carbon dioxide"], answer:"oxygen"},
-  {q:"In a food chain, energy transfer is usually limited to", options:["two trophic levels","three trophic levels","four trophic levels","five trophic levels"], answer:"four trophic levels"},
-  {q:"The main function of ribosomes in the cell is", options:["energy production","protein synthesis","lipid storage","DNA replication"], answer:"protein synthesis"},
-  {q:"Which of the following is NOT a characteristic of enzymes?", options:["specificity","reusability","alteration of reaction equilibrium","lowering of activation energy"], answer:"alteration of reaction equilibrium"},
-  {q:"In flowering plants, double fertilization involves", options:["two sperm cells fertilizing two egg cells","one sperm fertilizing the egg and the other fusing with polar nuclei","one sperm fertilizing the ovule and the other the ovary","two pollen grains fertilizing two ovules"], answer:"one sperm fertilizing the egg and the other fusing with polar nuclei"},
-  {q:"In humans, implantation of the fertilized egg occurs in the", options:["ovary","fallopian tube","uterus","cervix"], answer:"uterus"},
-  {q:"Which hormone is responsible for the development of secondary sexual characteristics in males?", options:["estrogen","testosterone","progesterone","luteinizing hormone"], answer:"testosterone"},
-  {q:"The enzyme responsible for protein digestion in the stomach is", options:["amylase","pepsin","lipase","maltase"], answer:"pepsin"},
-  {q:"Bile is produced by the", options:["gall bladder","pancreas","stomach","liver"], answer:"liver"},
-  {q:"Which of the following structures is responsible for excretion in flatworms?", options:["flame cells","nephridia","malpighian tubules","kidneys"], answer:"flame cells"},
-  {q:"Urea is produced mainly in the", options:["lungs","kidney","skin","liver"], answer:"liver"},
-  {q:"The functional unit of the kidney is the", options:["alveolus","nephron","neuron","villus"], answer:"nephron"},
-  {q:"Which of the following processes does NOT occur in the nephron?", options:["filtration","reabsorption","respiration","secretion"], answer:"respiration"},
-  {q:"The theory of natural selection was proposed by", options:["Gregor Mendel","Charles Darwin","Carl Linnaeus","Louis Pasteur"], answer:"Charles Darwin"},
-  {q:"Which of the following is evidence of organic evolution?", options:["genetic engineering","fossil records","cloning","mutation"], answer:"fossil records"},
-  {q:"Night blindness is caused by deficiency of", options:["vitamin B₁","vitamin D","vitamin A","vitamin C"], answer:"vitamin A"},
-  {q:"Which disease is transmitted by the female Anopheles mosquito?", options:["sleeping sickness","yellow fever","malaria","cholera"], answer:"malaria"},
-  {q:"Kwashiorkor is caused mainly by", options:["vitamin deficiency","protein deficiency","calcium deficiency","carbohydrate deficiency"], answer:"protein deficiency"},
-  {q:"The hormone insulin is secreted by the", options:["adrenal gland","thyroid gland","pancreas","pituitary gland"], answer:"pancreas"},
-  {q:"Over-secretion of growth hormone in children leads to", options:["dwarfism","goitre","gigantism","acromegaly"], answer:"gigantism"},
-  {q:"Which of the following organs is responsible for coordination in mammals?", options:["cerebrum","cerebellum","medulla","spinal cord"], answer:"cerebellum"},
-  {q:"Which of the following systems transports digested food in humans?", options:["respiratory system","excretory system","circulatory system","skeletal system"], answer:"circulatory system"}
-];
 
-// Combine with previous sections
-allQuestions.push(...biologyQuestions);
-totalQuestions = allQuestions.length; // now 160 questions
-    </script>
+function nextQuestion(){
+  saveAnswer();
+  if(currentQuestion<questions.length-1){
+    currentQuestion++;
+    showQuestion();
+  }
+}
+
+function saveAnswer(){
+  const selected = document.querySelector('input[name="option"]:checked');
+  userAnswers[currentQuestion] = selected ? selected.value : null;
+}
+
+function submitTest(){
+  saveAnswer();
+  // Calculate score (placeholder logic, all correct answers must be set in real scenario)
+  let score = userAnswers.filter(a=>a).length;
+  const candidate = JSON.parse(localStorage.getItem("currentCandidate"));
+  participants.push({name:candidate.name,email:candidate.email,score});
+  localStorage.setItem("participants",JSON.stringify(participants));
+  document.getElementById("test-card").style.display = "none";
+  document.getElementById("results-card").style.display = "block";
+  displayResults(candidate.name,score);
+}
+
+function displayResults(name,score){
+  document.getElementById("results").innerHTML = `<p>${name}, your total score is ${score} / ${questions.length}</p>`;
+  const list = document.getElementById("participant-list");
+  list.innerHTML = participants.map(p=>`<li>${p.name} (${p.email}) - ${p.score}</li>`).join("");
+}
+
+function startTimer(){
+  timerInterval = setInterval(()=>{
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      submitTest();
+    }
+    let h = Math.floor(timeLeft/3600);
+    let m = Math.floor((timeLeft%3600)/60);
+    let s = timeLeft%60;
+    document.getElementById("timer").textContent = `Time Left: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    timeLeft--;
+  },1000);
+}
+</script>
+
+</body>
+                              </html>
